@@ -46,7 +46,7 @@ grammer = file.readlines()
 
 productions = {} # {1: {left: 's', right: ['asd']}}
 for index, production in enumerate(grammer):
-    if (index == 0):
+    if (index == 0): # Neglecting 1st production
         continue
     rightSide = production.rstrip().split('->')[1].rstrip().split(' ') # ['chased', 'a']
     leftSide = production.rstrip().split('->')[0].rstrip().split(' ')[0] # string
