@@ -50,68 +50,69 @@ for index, production in enumerate(grammer):
     leftSide = production.rstrip().split('->')[0].rstrip().split(' ')[0] # string
     productions[f"{index+1}"] = { 'left': leftSide, 'right': rightSide }
 
-print('\nProductions: ', productions)
+print('\nProductions: ', productions, '\n')
 
 # Now initializing Stack
 stack = ['$', '0']
+currentInputIndex = 0
 
 while True:
 
     if len(startingInput) == 0:
-        print('Parsed Failed!!!')
+        print('Parsing Failed because nothing is in Input!!!')
 
-    tableRowIndex = 1 # Default Value
     stackTopElement = stack[-1]
+    tableRowIndex = 1 # Default Value
     for index, row in enumerate(fullTable):
         if row[0] == stackTopElement:
             tableRowIndex = index
 
     tableColIndex = 1 # Default Value
     for index, word in enumerate(tableHeader):
-        if startingInput[0] == word:
+        if startingInput[currentInputIndex] == word:
             tableColIndex = index
 
     operation = fullTable[tableRowIndex][tableColIndex]
+
+    if operation == '-':
+        print('Parsed Failed!!!')
+        break
     
-    break
-    # index_C = table[0].index(char)
-    # accept_state = table[index_R][index_C]
+    elif operation == "acc":
+        print('Parsed Successfully')
+        break
 
-    # if accept_state == "acc":
-    #     print("\n")
-    #     print("Parsed Successfully")
-    #     break
+    elif operation.startswith("s"):
+        print("Shift Operation:", operation)
+        stack.append(startingInput[currentInputIndex])
+        stack.append(operation[1:])
+        currentInputIndex+=1 # Moving Forward in Input
 
-    # elif accept_state.startswith("s"):
+    elif operation.startswith("r"):
+        print("Reduction Operation", operation)
+        reduceEquation = operation[1:]
+        rightSideLength = len(productions[reduceEquation]['right']) * 2
+        for _ in range(rightSideLength):
+            stack.pop()
 
-    #     temp = accept_state[1:]
-    #     stack.append(char)
-    #     print(f"Current Char == {char}\What pushed in Stack Just: \n{stack}")
-    #     stack.append(temp)
-    #     print(f"Current Char == {char}\nWhat pushed in Stack Just : \n{stack}")
-        
+        leftSide = productions[reduceEquation]['left']
+        stack.append(leftSide)
 
-    # elif accept_state.startswith("r"):
-    #     temp = accept_state[1:]
-    #     len_grammar = 0
-    #     for grammar in productions.items():
-    #         if temp == grammar[0]:
-    #             push_symbol = grammar[1].split("->")[0]
-    #             temp_grammar = grammar[1].split("->")[-1]
-    #             len_grammar = len(temp_grammar)
-    #             break
-    #     for i in range(len_grammar * 2):
-    #         stack.pop()
-    #         print(f"Current Char ==> {char}\Pop Action : \n{stack}")
-    #     stack.append(push_symbol)
-    #     print(f"Current Char ==> {char}\nStack Action Push : \n{stack}")
-    #     temp_index_R = all_states.index(stack[-2])
-    #     temp_index_C = table[0].index(stack[-1])
-    #     temp_accept_state = table[temp_index_R][temp_index_C]
-    #     stack.append(temp_accept_state)
-    #     print(f"Charater-> {char}\Push in Stack: \n{stack}")
+        headerElement = leftSide
+        rowElement = stack[-2]
 
-    # elif accept_state == "-":
-    #     print("\n!!Parse Failed")
-    #     break
-    # inputLoop +=1
+        rowIndex = 1 # Default Value
+        for index, row in enumerate(fullTable):
+            if row[0] == rowElement:
+                rowIndex = index
+
+        colIndex = 1 # Default Value
+        for index, word in enumerate(tableHeader):
+            if headerElement == word:
+                colIndex = index
+
+        stackTopTwoResult = fullTable[rowIndex][colIndex]
+        stack.append(stackTopTwoResult)
+
+    print(stack)
+    print("End\n")
