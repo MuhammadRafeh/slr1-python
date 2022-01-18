@@ -1,0 +1,31 @@
+S ->X Y
+X ->D N
+X ->P
+N ->A N
+N ->M
+Y ->V A
+Y ->V X
+Y ->V S
+Y ->V X Q
+Q ->R X
+P ->buster
+P ->chatter
+P ->joe
+D ->the
+D ->a
+M ->bear
+M ->squirrel
+M ->tree
+M ->fish
+M ->fog
+A ->angry
+A ->frightened
+A ->little
+A ->tall
+V ->chased
+V ->saw
+V ->said
+V ->thought
+V ->was
+V ->put
+R ->on
