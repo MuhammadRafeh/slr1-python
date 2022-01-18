@@ -46,9 +46,11 @@ grammer = file.readlines()
 
 productions = {} # {1: {left: 's', right: ['asd']}}
 for index, production in enumerate(grammer):
+    if (index == 0):
+        continue
     rightSide = production.rstrip().split('->')[1].rstrip().split(' ') # ['chased', 'a']
     leftSide = production.rstrip().split('->')[0].rstrip().split(' ')[0] # string
-    productions[f"{index+1}"] = { 'left': leftSide, 'right': rightSide }
+    productions[f"{index}"] = { 'left': leftSide, 'right': rightSide }
 
 print('\nProductions: ', productions, '\n')
 
@@ -73,6 +75,8 @@ while True:
             tableColIndex = index
 
     operation = fullTable[tableRowIndex][tableColIndex]
+
+    print('State: ', fullTable[tableRowIndex][0], '| Table Header: ', tableHeader[tableColIndex])
 
     if operation == '-':
         print('Parsed Failed!!!')
